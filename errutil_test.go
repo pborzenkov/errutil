@@ -2,8 +2,20 @@ package errutil
 
 import (
 	"errors"
+	"fmt"
 	"testing"
 )
+
+func recovered(f func()) (err error) {
+	defer func() {
+		if r := recover(); r != nil {
+			err = fmt.Errorf("%v", r)
+		}
+	}()
+
+	f()
+	return
+}
 
 func TestFirst(t *testing.T) {
 	err1 := errors.New("first error")

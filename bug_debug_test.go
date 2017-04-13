@@ -7,25 +7,13 @@ import (
 	"testing"
 )
 
-func testFunc(f func()) (err error) {
-	defer func() {
-		if r := recover(); r != nil {
-			err = fmt.Errorf("%v", r)
-		}
-	}()
-
-	f()
-
-	return nil
-}
-
 func TestBug(t *testing.T) {
 	format := "horrendous error %d %d"
 	data := []interface{}{5, 7}
 
-	err := testFunc(func() { Bug(format, data...) })
+	err := recovered(func() { Bug(format, data...) })
 	if err == nil {
-		t.Fatal("expected testFunc to fail, but it's passed")
+		t.Fatal("expected Bug() to happen, but it hasn't")
 	}
 
 	if want, got := fmt.Sprintf("BUG: "+format, data...), err.Error(); want != got {
@@ -45,10 +33,10 @@ func TestBugOn(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		err := testFunc(func() { BugOn(test.cond, test.format, test.data...) })
+		err := recovered(func() { BugOn(test.cond, test.format, test.data...) })
 		if !test.cond {
 			if err != nil {
-				t.Fatal("expected testFunc(%v, %v, %v) to pass, but it's failed",
+				t.Fatal("expected BugOn(%v, %v, %v) to happen, but it hasn't",
 					test.cond, test.format, test.data)
 			}
 			continue
