@@ -36,7 +36,7 @@ func TestBugOn(t *testing.T) {
 		err := recovered(func() { BugOn(test.cond, test.format, test.data...) })
 		if !test.cond {
 			if err != nil {
-				t.Fatal("expected BugOn(%v, %v, %v) to happen, but it hasn't",
+				t.Fatalf("expected BugOn(%v, %v, %v) to happen, but it hasn't",
 					test.cond, test.format, test.data)
 			}
 			continue
