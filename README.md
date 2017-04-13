@@ -1,6 +1,6 @@
 
 
-# errutil
+# errutil [![Build Status](https://travis-ci.org/pborzenkov/errutil.svg?branch=master)](https://travis-ci.org/pborzenkov/errutil)
 `import "github.com/pborzenkov/errutil"`
 
 * [Overview](#pkg-overview)
