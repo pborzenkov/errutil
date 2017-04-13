@@ -39,3 +39,29 @@ func TestFirst(t *testing.T) {
 		}
 	}
 }
+
+func TestFatalIf(t *testing.T) {
+	var tests = []struct {
+		in   error
+		fail bool
+	}{
+		{errors.New("test error"), true},
+		{nil, false},
+	}
+
+	for _, test := range tests {
+		err := recovered(func() { FatalIf(test.in) })
+		if !test.fail {
+			if err != nil {
+				t.Errorf("FatalIf(%v): expected to pass, but it hasn't", test.in)
+			}
+			continue
+		}
+		if err == nil {
+			t.Errorf("FatalIf(%v): expected to fail, but it hasn't", test.in)
+		}
+		if want, got := fmt.Sprintf("FATAL: %v", test.in), err.Error(); want != got {
+			t.Errorf("FatalIf(%v): unexpected error, want = %q, got = %q", test.in, want, got)
+		}
+	}
+}
